@@ -1,0 +1,5 @@
+UPDATE_BUTTON = 'update-charts-button'
+LINE_CHART = 'line-chart'
+DRAWDOWN_CHART = 'drawdown-chart'
+ALPHA_CHART = 'alpha-chart'
+ATIVOS_DROPDOWN = 'ativos-dropdown'
