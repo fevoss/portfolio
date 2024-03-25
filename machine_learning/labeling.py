@@ -59,7 +59,7 @@ def aplicar_tripla_barreira(precos: pd.Series,
             df.loc[loc, 't1'] = t1
 
     df[df.columns[-1]] = np.sign(df['retorno'])
-
+    df[df.columns[-1]] = df[df.columns[-1]].astype(float)
     df.index.name = 't0'
     return df
 
