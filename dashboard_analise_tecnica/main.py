@@ -1,5 +1,5 @@
 from dash import Dash
-from dashboard import layout
+from dashboard_analise_tecnica import layout
 
 
 def main():

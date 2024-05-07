@@ -1,6 +1,6 @@
 import pandas as pd
 from dash import Dash, html, dcc
-from dashboard import ids
+from dashboard_analise_tecnica import ids
 from dash.dependencies import Input, Output
 import plotly.graph_objects as go
 import itertools as it

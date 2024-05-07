@@ -1,6 +1,6 @@
 from dash import html, Dash, dcc
 from . import ids
-from dashboard.lista_ativos import ativos
+from dashboard_analise_tecnica.lista_ativos import ativos
 
 
 def render(app: Dash) -> html.Div:
