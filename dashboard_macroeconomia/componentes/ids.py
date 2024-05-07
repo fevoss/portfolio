@@ -1,5 +1,6 @@
-GRAFICO_PDJ = 'grafico'
-SLIDER_JUROS_LOCAL = 'slider-juros-local'
+GRAFICO_MERCADO_ATIVOS = 'grafico-mercado-ativos'
+SLIDER_MOEDAS = 'slider-moedas'
+SLIDER_PIB = 'slider-pib'
 SLIDER_JUROS_ESTRANGEIRO = 'slider-juros-estrangeiro'
 SLIDER_CAMBIO_ESPERADO = 'slider-cambio-esperado'
 SLIDER_DIFERENCIAL_RISCO = 'slider-diferencial-risco'
