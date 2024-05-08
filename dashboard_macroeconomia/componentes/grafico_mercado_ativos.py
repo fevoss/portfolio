@@ -1,5 +1,3 @@
-import time
-
 from dash import Output, Input, callback, dcc
 import numpy as np
 from plotly.subplots import make_subplots
@@ -20,8 +18,8 @@ def pdj(fig: go.Figure,
         x=x,
         y=y,
         mode="lines",
-        name="Retorno Externo",
-        line=dict(color="black")), row=1, col=1)
+        name="Ret. Estrangeiro",
+        line=dict(color="#FF8C00")), row=1, col=1)
 
     # Retorno Esperado Doméstico
     y = np.arange(0, 10, 0.1)
@@ -29,15 +27,15 @@ def pdj(fig: go.Figure,
         x=[juros_local] * len(y),
         y=y,
         mode="lines",
-        name="Retorno Local",
-        line=dict(color="red")), row=1, col=1)
+        name="Ret. Local",
+        line=dict(color="grey")), row=1, col=1)
 
     cambio_eq = cambio_esperado / (1 + juros_local - juros_estrangeiro / 100 - diferencial_risco / 100)
     fig.add_trace(go.Scatter(
         x=[juros_local],
         y=[cambio_eq],
         mode="markers",
-        name="Câmbio", marker=dict(size=10, color='green')), row=1, col=1)
+        name="Equilíbrio", marker=dict(size=10, color="#FF8C00")), row=1, col=1)
 
 
 def mercado_monetario(fig: go.Figure, moedas: float, preco: float, pib: float):
@@ -52,15 +50,15 @@ def mercado_monetario(fig: go.Figure, moedas: float, preco: float, pib: float):
         x=juros,
         y=demanda_real_por_liquidez,
         mode="lines",
-        name="Demanda Real",
-        line=dict(color="blue")), row=2, col=1)
+        name="Liquidez Real",
+        line=dict(color="#FF8C00")), row=2, col=1)
 
     fig.add_trace(go.Scatter(
         x=np.arange(0, 2, 1),
         y=[moedas / preco] * 2,
         mode="lines",
-        name="Demanda Real Escolhido pelo BACEN",
-        line=dict(color="red")), row=2, col=1)
+        name="Oferta Monetária Real",
+        line=dict(color="grey")), row=2, col=1)
 
     juros_local = beta_liquidez_real * np.power(moedas / preco, -sensibilidade) \
                   * beta_pib * np.power(pib, 1 - sensibilidade)
@@ -68,7 +66,8 @@ def mercado_monetario(fig: go.Figure, moedas: float, preco: float, pib: float):
         x=[juros_local],
         y=[moedas / preco],
         mode="markers",
-        name="Juros Local - BACEN", marker=dict(size=10, color='green')), row=2, col=1)
+        name="Juros Local - BACEN", marker=dict(size=10, color="#FF8C00"),
+        showlegend=False), row=2, col=1)
 
     return juros_local
 
@@ -86,19 +85,26 @@ def render_grafico_mercado_de_ativos():
                                       juros_estrangeiro: float,
                                       cambio_esperado: float,
                                       diferencial_risco: float):
-        fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.1)
+
+        fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0)
         juros_local = mercado_monetario(fig=fig, moedas=moedas, preco=1, pib=pib)
         pdj(fig, juros_local, juros_estrangeiro, cambio_esperado, diferencial_risco)
 
-        cambio_eq = cambio_esperado / (1 + juros_local - juros_estrangeiro / 100 - diferencial_risco / 100)
         fig.update_yaxes(range=[0, 7], showticklabels=True, row=1, col=1)
         fig.update_yaxes(range=[6, 0], showticklabels=True, row=2, col=1)
-        fig.update_layout(title_text=f"Câmbio={round(cambio_eq, 2)}R$ | Juros={round(juros_local * 100, 2)}%",
-                          title_font_size=20, title_x=0.5,
-                          template='seaborn')
-        fig.update_xaxes(range=[0, 1], showticklabels=False, row=1, col=1)
-        fig.update_xaxes(range=[0, 1], showticklabels=True, row=2, col=1)
-        fig.update_xaxes(matches='x')
+        fig.update_layout(title_text=f"Mercado de Ativos | Teórico",
+                          title_font_size=15, title_x=0.5,
+                          paper_bgcolor='rgba(37,40,43,100)',
+                          template='plotly_dark',
+                          showlegend=False)
+        fig.update_xaxes(range=[0, 1], showticklabels=False, row=1, col=1, showgrid=False,  zeroline=False,
+                         showline=True, linecolor='white')
+        fig.update_yaxes(showgrid=False, zeroline=False, showline=True, linecolor='white', row=1, col=1,
+                         title="Câmbio")
+        fig.update_xaxes(range=[0, 1], showticklabels=True, row=2, col=1, showgrid=False, zeroline=False,
+                         showline=True, linecolor='white', title='Retorno Local', tickformat='.0%')
+        fig.update_yaxes(showgrid=False, zeroline=False, showline=True, linecolor='white', row=2, col=1,
+                         title="Liquidez Real")
 
         return fig
 
